@@ -1,0 +1,16 @@
+{
+  "name": "fake-player",
+  "version": "0.0.1",
+  "description": "A player without video for Biu demo",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "webpack-dev-server"
+  },
+  "author": "sdjdd",
+  "license": "MIT",
+  "devDependencies": {
+    "webpack": "^4.29.3",
+    "webpack-cli": "^3.2.3",
+    "webpack-dev-server": "^3.1.14"
+  }
+}
