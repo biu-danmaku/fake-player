@@ -34,7 +34,6 @@ class FakePlayer {
   }
   play() {
     if (this.playing) return
-    this.timer = undefined  // 立即对 timer 赋值防止在 setInterval 之前修改 time 导致重复播放
     this.controls.fade()
     this.controls.btnPlay.classList.add('playing')
     if (this.time >= this.duration) {
@@ -66,7 +65,6 @@ class FakePlayer {
     else if (value > this.duration) value = duration
     this._time = value
     this.controls.progress.moveProgress()
-    if ( ! this.playing) this.play()
   }
   set rate(value) { 
     this.time = Math.round(this.duration * value) 
