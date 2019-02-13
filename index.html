@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Fake player for Biu</title>
+</head>
+<style>
+  .player-box {
+    margin: 0 auto;
+    width: 800px;
+    height: 600px;
+  }
+</style>
+<body>
+  <div class="player-box"></div>
+<script src="/dist/fake-player.min.js"></script>
+<script>
+  const player = new FakePlayer({
+    el: '.player-box',
+    duration: 5,
+  })
+</script>
+</body>
+</html>
