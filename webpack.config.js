@@ -1,3 +1,5 @@
+const path = require('path')
+
 module.exports = {
   mode: 'development',
   output: {
@@ -18,5 +20,10 @@ module.exports = {
         use: { loader: 'svg-url-loader' }
       }
     ]
+  },
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, 'src'),
+    }
   }
 }
