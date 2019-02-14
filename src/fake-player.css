@@ -10,7 +10,6 @@
 }
 .fake-player > .player > .screen {
   height: 100%;
-  background-color: #000;
 }
 .fake-player > .player > .controls {
   position: absolute;
@@ -82,7 +81,7 @@
   background-image: url('./images/play.svg');
   left: 24px;
 }
-.fake-player > .player > .controls > .btn.play.playing {
+.fake-player > .player.playing > .controls > .btn.play {
   background-image: url('./images/pause.svg');
 }
 .fake-player > .player > .controls > .btn.full-window {
