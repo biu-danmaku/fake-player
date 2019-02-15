@@ -1,101 +1,47 @@
-import Controls from './controls'
+import Player from './player'
 
 class FakePlayer {
   constructor(args) {
-    this.duration = args.duration
-    this._time = 0
-    this._fullScreen = false
-    this.timer = null
-
-    this.el = document.querySelector(args.el)
-    this.el.classList.add('fake-player')
-
-    this.container = document.createElement('div')
-    this.container.classList.add('player')
-    this.el.appendChild(this.container)
-
-    this.screen = document.createElement('div')
-    this.screen.classList.add('screen')
-    this.screen.addEventListener('click', () => this.togglePlay())
-    this.container.appendChild(this.screen)
-
-    this.controls = new Controls(this)
-
-    this.container.onmousemove = () => {
-      if (this.playing) {
-        this.controls.fade()
-      }
+    this._privates = {
+      container: undefined,
+      player: undefined,
     }
-    this.container.onmouseleave = () => {
-      if (this.playing) {
-        this.controls.hide()
-      }
-    }
+
+    // events
+    this.onplay = undefined
+    this.onpause = undefined
+    this.onchange = undefined
+
+    this._privates.player = new Player(this)
+    initContainerElement.call(this, args.container)
+
+    this.duration = args.duration || 0
+    this.background = args.background || '#000'
   }
-  play() {
-    if (this.playing) return
-    this.controls.fade()
-    this.controls.btnPlay.classList.add('playing')
-    if (this.time >= this.duration) {
-      this.time = 0
-    }
-    this.timer = setInterval(() => {
-      this.time += 1
-      if (this.time >= this.duration) {
-        this.pause()
-      }
-    }, 1000)
+  set duration(second) {
+    this._privates.player.duration = second * 1000
   }
-  pause() {
-    if ( ! this.playing) return
-    this.controls.clearFade()
-    this.controls.show()
-    this.controls.btnPlay.classList.remove('playing')
-    clearInterval(this.timer)
-    this.timer = null
+  get duration() {
+    return this._privates.player.duration / 1000
   }
-  togglePlay() { 
-    this.playing ? this.pause() : this.play() 
+  set background(value) {
+    this._privates.player.screen.style['background'] = value
   }
-  get time() { 
-    return this._time 
-  }
-  set time(value) {
-    if (value < 0) value = 0
-    else if (value > this.duration) value = duration
-    this._time = value
-    this.controls.progress.moveProgress()
-  }
-  set rate(value) { 
-    this.time = Math.round(this.duration * value) 
-  }
-  get fullWindow() {
-    return this.container.classList.contains('full-window')
-  }
-  set fullWindow(value) {
-    if (value) {
-      this.container.classList.add('full-window')
-      this.controls.btnFullWindow.classList.add('active')
-    } else {
-      this.container.classList.remove('full-window')
-      this.controls.btnFullWindow.classList.remove('active')
-    }
-  }
-  get fullScreen() {
-    return this._fullScreen
-  }
-  set fullScreen(value) {
-    if (value) {
-      this.container.requestFullscreen().then(() => this._fullScreen = true)
-    } else {
-      document.exitFullscreen()
-        .catch((err) => {})  // 忽略错误
-        .finally(() => this._fullScreen = false)
-    }
-  }
-  get playing() {
-    return this.timer !== null
+  get background() {
+    return this._privates.player.screen.style['background']
   }
 }
 
 export default FakePlayer
+
+function initContainerElement(container) {
+  if (typeof container === 'string') {
+    this._privates.container = document.querySelector(container)
+  } else if (container instanceof HTMLElement) {
+    this._privates.container = container
+  } else {
+    throw new Error('Invalid container')
+  }
+  this._privates.container.classList.add('fake-player')
+  this._privates.container.appendChild(this._privates.player.container)
+}
