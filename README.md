@@ -14,6 +14,7 @@ const player = new FakePlayer({
   // 创建播放器时必须提供容器
   // 可以是 CSS 选择器或 HTMLElement 实例
   container: '.player-box',
+  // "视频"时长, 毫秒
   duration: 300,
 })
 ```
@@ -21,14 +22,14 @@ const player = new FakePlayer({
 FakePlayer 未提供任何 API，而是提供了以下几个事件
 ```js
 player.onplay = function (time) {
-  // 用户点击播放按钮
+  // 点击播放按钮
   // time 为当前播放时间
 }
 player.onpause = function () {
-  // 用户点击暂停按钮
+  // 点击暂停按钮
 }
 player.onchange = function (time) {
-  // 用户通过拖拽进度条改变播放时间
+  // 拖拽进度条改变播放时间
   // time 为当前播放时间
 }
 ```
@@ -38,7 +39,7 @@ player.onchange = function (time) {
 
 名称|描述
 -|-
-duration|“视频”总时长，改变该值会暂停播放并将当前播放时间设置为0，但不会触发 `onpause` 和 `onchange` 事件
+duration|“视频”总时长(毫秒)，改变该值会暂停播放并将当前播放时间设置为0，但不会触发 `onpause` 和 `onchange` 事件
 background|播放器背景，一个 CSS 字符串
 
 ### 引用
