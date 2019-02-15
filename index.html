@@ -13,12 +13,21 @@
 </style>
 <body>
   <div class="player-box"></div>
-<script src="/dist/fake-player.min.js"></script>
+<script src="fake-player.min.js"></script>
 <script>
   const player = new FakePlayer({
-    el: '.player-box',
-    duration: 5,
+    container: '.player-box',
+    duration: 300,
   })
+  player.onplay = function (time) {
+    console.log('播放, time = ' + time)
+  }
+  player.onpause = function () {
+    console.log('暂停')
+  }
+  player.onchange = function (time) {
+    console.log('时间改变, time = ' + time)
+  }
 </script>
 </body>
 </html>
