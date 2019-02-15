@@ -4,6 +4,10 @@ module.exports = {
   mode: 'development',
   output: {
     filename: 'fake-player.min.js',
+    library: 'FakePlayer',
+    libraryTarget: 'umd',
+    libraryExport: 'default',
+    umdNamedDefine: true,
   },
   module: {
     rules: [
