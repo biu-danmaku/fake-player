@@ -1,14 +1,16 @@
 const path = require('path')
 
+const development = process.env.NODE_ENV === 'development'
+
 module.exports = {
-  mode: 'development',
+  mode: development ? 'development' : 'production',
   output: {
     filename: 'fake-player.min.js',
     library: 'FakePlayer',
     libraryTarget: 'umd',
     libraryExport: 'default',
     umdNamedDefine: true,
-    publicPath: process.env.NODE_ENV === 'development' ? 'dist' : '/'
+    publicPath: development ? 'dist' : '/'
   },
   module: {
     rules: [
