@@ -1,5 +1,7 @@
 # FakePlayer
 
+[查看 DEMO](https://biu-danmaku.github.io/fake-player/demo/)
+
 ### 说明
 本项目诞生于 Biu 的 demo，原计划使用 div 拼装一个简单的播放器来交互展示 Biu 的功能，没想到越写越复杂。
 索性新建一个项目来构建一个完整且美观的播放器 UI，也为以后踩播放器这个深坑做些技术上的铺垫。
