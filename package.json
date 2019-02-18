@@ -4,7 +4,7 @@
   "description": "A player without video for Biu demo",
   "main": "src/index.js",
   "scripts": {
-    "start": "webpack-dev-server",
+    "start": "cross-env webpack-dev-server",
     "build": "webpack --mode production"
   },
   "author": "sdjdd",
@@ -18,5 +18,8 @@
     "webpack": "^4.29.3",
     "webpack-cli": "^3.2.3",
     "webpack-dev-server": "^3.1.14"
+  },
+  "dependencies": {
+    "cross-env": "^5.2.0"
   }
 }
