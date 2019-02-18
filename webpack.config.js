@@ -8,6 +8,7 @@ module.exports = {
     libraryTarget: 'umd',
     libraryExport: 'default',
     umdNamedDefine: true,
+    publicPath: process.env.NODE_ENV === 'development' ? 'dist' : '/'
   },
   module: {
     rules: [
@@ -34,5 +35,8 @@ module.exports = {
     alias: {
       '@': path.resolve(__dirname, 'src'),
     }
+  },
+  devServer: {
+    contentBase: path.join(__dirname, 'demo')
   }
 }
