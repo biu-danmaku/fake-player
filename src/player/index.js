@@ -39,7 +39,7 @@ class Player {
       }
     }
     this.controls.onProgressActive = (rate) => {
-      this.controls.timeText = utils.ms2text(rate * this.duration)
+      this.controls.timeText = this.controls.progress.timeText = utils.ms2text(rate * this.duration)
     }
     this.controls.onProgressChange = (rate) => {
       this.time = rate * this.duration

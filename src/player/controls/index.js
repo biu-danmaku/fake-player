@@ -83,7 +83,7 @@ class Controls {
     this.duration.innerText = ' / ' + value
   }
   set timeText(value) {
-    this.time.innerText = this.progress.timeText = value
+    this.time.innerText = value
   }
 }
 
