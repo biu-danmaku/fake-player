@@ -30,7 +30,7 @@ module.exports = {
       },
       {
         test: /\.svg/,
-        use: { loader: 'svg-url-loader' }
+        use: 'svg-url-loader'
       },
       {
         test: /\.m?js$/,
@@ -40,7 +40,7 @@ module.exports = {
   },
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, 'src'),
+      '@': path.resolve(__dirname, 'src')
     }
   },
   devServer: {
