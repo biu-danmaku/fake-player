@@ -32,9 +32,19 @@ class Player {
 
       onFullScreenClick: () => {
         if (this.fullScreen) {
-          document.exitFullscreen().catch(() => {}).finally(() => this.fullScreen = false)
+          if (document.webkitCancelFullScreen) {
+            document.webkitCancelFullScreen();
+          } else {
+            document.exitFullscreen()
+          }
+          this.fullScreen = false
         } else {
-          this.container.requestFullscreen().then(() => this.fullScreen = true)
+          if (this.container.webkitRequestFullscreen) {
+            this.container.webkitRequestFullscreen()
+          } else {
+            this.container.requestFullscreen()
+          }
+          this.fullScreen = true
         }
       },
 
