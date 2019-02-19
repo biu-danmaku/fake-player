@@ -10,8 +10,14 @@
     width: 800px;
     height: 600px;
   }
+  .action-tip {
+    font-size: 20px;
+    text-align: center;
+    margin: 20px;
+  }
 </style>
 <body>
+  <div class="action-tip">Faker player demo</div>
   <div class="player-box"></div>
 <script src="../dist/fake-player.min.js"></script>
 <script>
@@ -19,14 +25,15 @@
     container: '.player-box',
     duration: 300,
   })
+  const actionTip = document.querySelector('.action-tip')
   player.onplay = function (time) {
-    console.log('播放, time = ' + time)
+    actionTip.innerText = 'Play at ' + time + ' ms'
   }
   player.onpause = function () {
-    console.log('暂停')
+    actionTip.innerText = 'Pause'
   }
   player.onchange = function (time) {
-    console.log('时间改变, time = ' + time)
+    actionTip.innerText = 'Time changed to ' + time + ' ms'
   }
 </script>
 </body>
