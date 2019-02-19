@@ -66,10 +66,12 @@ class Slider {
             }
         }
         let upHandler = (e) => {
-            moveHandler(e)
-            if (this.onChange) this.onChange(this.value)
-            document.removeEventListener('mouseup', upHandler)
-            document.removeEventListener('mousemove', moveHandler)
+            if (e.button === 0) {
+                moveHandler(e)
+                if (this.onChange) this.onChange(this.value)
+                document.removeEventListener('mouseup', upHandler)
+                document.removeEventListener('mousemove', moveHandler)
+            }
         }
         this.container.onmousedown = (e) => {
             if (e.button === 0) {
