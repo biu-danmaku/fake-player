@@ -1,4 +1,3 @@
-import Player from './player'
 
 class FakePlayer {
   constructor(args) {
