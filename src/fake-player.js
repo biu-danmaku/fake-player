@@ -1,3 +1,4 @@
+import Player from './components/Player'
 
 class FakePlayer {
   constructor(args) {
