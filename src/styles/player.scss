@@ -1,0 +1,16 @@
+.fake-player-player {
+    position: relative;
+    box-shadow: 0 0 4px #ddd;
+    width: 100%;
+    height: 100%;
+    .screen {
+        height: 100%;
+    }
+    &.full-window {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+}
