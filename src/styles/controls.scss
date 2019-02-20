@@ -17,29 +17,37 @@
         left: 16px;
         right: 16px;
     }
-    .button {
+    > .button {
         position: absolute;
         top: 16px;
         height: 26px;
         width: 26px;
-        opacity: .6;
         cursor: pointer;
-        fill: rgb(255, 255, 255);
-        transition: opacity 200ms;
+        fill: rgba(255, 255, 255, .6);
+        transition: fill 200ms;
         &:hover {
-          opacity: .9;
+            fill: rgba(255, 255, 255, .9);
         }
         &.play {
-          left: 24px;
+            left: 24px;
         }
         &.danmaku-config {
-          right: 96px;
+            left: 180px;
+            .fake-player-danmaku-config {
+                display: none;
+                left: 50%;
+                bottom: 100%;
+                transform: translateX(-50%);
+            }
+            &:hover .fake-player-danmaku-config {
+                display: block;
+            }
         }
         &.full-window {
-          right: 60px;
+            right: 60px;
         }
         &.full-screen {
-          right: 24px;
+            right: 24px;
         }
       }
     .time-box {
@@ -51,7 +59,7 @@
         user-select: none;
     }
     &.hide {
-      opacity: 0;
-      pointer-events: none;
+        opacity: 0;
+        pointer-events: none;
     }
 }
