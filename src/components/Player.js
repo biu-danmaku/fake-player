@@ -88,7 +88,6 @@ class Player {
     this.timer = null
     this.lastTickAt = Date.now()
     this.controls.fadeOut()
-    this.container.classList.add('playing')
     this.controls.activeButton('play')
     if (this.time >= this.duration) {
       this.time = 0
@@ -108,7 +107,6 @@ class Player {
     clearInterval(this.timer)
     this.time += Date.now() - this.lastTickAt
     this.controls.show()
-    this.container.classList.remove('playing')
     this.controls.activeButton('play', false)
     this.timer = undefined
     if (this.fp.onpause) this.fp.onpause()
