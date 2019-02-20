@@ -18,33 +18,37 @@ class Player {
     this.screen.addEventListener('click', () => this.toggle())
 
     this.controls = new Controls({
-      onPlayClick: () => this.toggle(),
-
-      onFullWindowClick: () => {
-        if (this.container.classList.contains('full-window')) {
-          this.container.classList.remove('full-window')
-          return false
-        } else {
-          this.container.classList.add('full-window')
-          return true
-        }
-      },
-
-      onFullScreenClick: () => {
-        if (this.fullScreen) {
-          if (document.webkitCancelFullScreen) {
-            document.webkitCancelFullScreen();
-          } else {
-            document.exitFullscreen()
-          }
-          this.fullScreen = false
-        } else {
-          if (this.container.webkitRequestFullscreen) {
-            this.container.webkitRequestFullscreen()
-          } else {
-            this.container.requestFullscreen()
-          }
-          this.fullScreen = true
+      onButtonClick: (button) => {
+        switch (button) {
+          case 'play':
+            this.toggle()
+            break
+          case 'full-window':
+            if (this.container.classList.contains('full-window')) {
+              this.container.classList.remove('full-window')
+              this.controls.activeButton('full-window', false)
+            } else {
+              this.container.classList.add('full-window')
+              this.controls.activeButton('full-window')
+            }
+            break
+          case 'full-screen':
+            if (this.fullScreen) {
+              if (document.webkitCancelFullScreen) {
+                document.webkitCancelFullScreen();
+              } else {
+                document.exitFullscreen()
+              }
+              this.fullScreen = false
+            } else {
+              if (this.container.webkitRequestFullscreen) {
+                this.container.webkitRequestFullscreen()
+              } else {
+                this.container.requestFullscreen()
+              }
+              this.fullScreen = true
+            }
+            break
         }
       },
 
@@ -84,8 +88,8 @@ class Player {
     this.timer = null
     this.lastTickAt = Date.now()
     this.controls.fadeOut()
-    this.controls.playing = true
     this.container.classList.add('playing')
+    this.controls.activeButton('play')
     if (this.time >= this.duration) {
       this.time = 0
     }
@@ -104,8 +108,8 @@ class Player {
     clearInterval(this.timer)
     this.time += Date.now() - this.lastTickAt
     this.controls.show()
-    this.controls.playing = false
     this.container.classList.remove('playing')
+    this.controls.activeButton('play', false)
     this.timer = undefined
     if (this.fp.onpause) this.fp.onpause()
   }
