@@ -1,26 +1,30 @@
 class Slider {
-    constructor({ scales }) {
+    constructor(args) {
         this.container = document.createElement('div')
         this.container.classList.add('fake-player-slider')
 
-        this.left = undefined
-        this.width = undefined
-        this.scales = undefined
+        this.left     = undefined
+        this.width    = undefined
+        this.scales   = undefined
         this.onChange = undefined
-        this.value = undefined
+        this.value    = undefined
+
+        if (args && args.onChange) {
+            this.onChange = args.onChange
+        }
 
         let progress = document.createElement('div')
         progress.classList.add('progress')
 
-        if (scales) {
-            this.scales = new Array(scales.length)
-            let oneStep = 0
+        if (args && args.scales) {
+            this.scales = new Array(args.scales.length)
+            let oneStep = undefined
             let scalesContainer = document.createElement('div')
             scalesContainer.classList.add('scales')
-            for (let i = 0; i < scales.length; i++) {
+            for (let i = 0; i < args.scales.length; i++) {
                 let scale = document.createElement('div')
                 scale.classList.add('scale')
-                let leftRate = i / (scales.length - 1)
+                let leftRate = i / (args.scales.length - 1)
                 scale.style['left'] = leftRate * 100 + '%'
                 if (i === 1) {
                     oneStep = leftRate / 2
@@ -28,9 +32,9 @@ class Slider {
                 this.scales[i] = {
                     leftRate: leftRate
                 }
-                if (scales[i]) {
+                if (args.scales[i]) {
                     let text = document.createElement('span')
-                    text.innerText = scales[i]
+                    text.innerText = args.scales[i]
                     text.classList.add('text')
                     scale.appendChild(text)
                 }
@@ -51,7 +55,7 @@ class Slider {
 
         this.container.appendChild(progress)
 
-        let moveHandler = (e) => {
+        let dragHandler = (e) => {
             let rate = (e.clientX - this.left) / this.width
             if (this.scales) {
                 for (let i = 0; i < this.scales.length - 1; i++) {
@@ -67,10 +71,10 @@ class Slider {
         }
         let upHandler = (e) => {
             if (e.button === 0) {
-                moveHandler(e)
+                dragHandler(e)
                 if (this.onChange) this.onChange(this.value)
                 document.removeEventListener('mouseup', upHandler)
-                document.removeEventListener('mousemove', moveHandler)
+                document.removeEventListener('mousemove', dragHandler)
             }
         }
         this.container.onmousedown = (e) => {
@@ -78,12 +82,19 @@ class Slider {
                 let { left, width } = this.container.getBoundingClientRect()
                 this.left = left
                 this.width = width
-                moveHandler(e)
+                dragHandler(e)
                 document.addEventListener('mouseup', upHandler)
-                document.addEventListener('mousemove', moveHandler)
+                document.addEventListener('mousemove', dragHandler)
             }
         }
     }
+    /* set value(value) {
+        if (this.scales) {
+            this.step = value
+        } else {
+            this.rate = value
+        }
+    } */
     set rate(rate) {
         if (rate < 0) rate = 0
         else if (rate > 1) rate = 1
@@ -94,6 +105,12 @@ class Slider {
     set step(step) {
         this.dot.style['left'] = this.scales[step].leftRate * this.width + 'px'
         this.value = step
+    }
+    set mainColor(color) {
+        this.dot.style['backgroundColor'] = color
+        if ( ! this.scales) {
+            this.current.style['backgroundColor'] = color
+        }
     }
 }
 
