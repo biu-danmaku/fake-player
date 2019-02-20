@@ -1,3 +1,5 @@
+import DanmakuConfig from './DanmakuConfig'
+
 import ProgressBar from '@/widgets/ProgressBar'
 
 import svgPlay             from '@/images/play.svg'
@@ -8,7 +10,11 @@ import svgFullWindowCancel from '@/images/full-window-cancel.svg'
 import svgFullScreen       from '@/images/full-screen.svg'
 
 class Controls {
-    constructor({ buttonClickHandler, progressBarEventHandler }) {
+    constructor({
+        buttonClickHandler,
+        progressBarEventHandler,
+        sliderValueChangeHandler,
+    }) {
         this.hideTimer = null
 
         this.container = document.createElement('div')
@@ -21,6 +27,11 @@ class Controls {
         this.progressBar = new ProgressBar({
             eventHandler: progressBarEventHandler.bind(this),
             mountTo:      this.container,
+        })
+
+        this.DanmakuConfig = new DanmakuConfig({
+            sliderValueChangeHandler: (key, value) => console.log(key, value),
+            buttonClickHandler:       buttonClickHandler.bind(this)
         })
 
         let timeBox = document.createElement('div')
@@ -56,6 +67,7 @@ class Controls {
         for (let key in this.buttons) {
             this.container.appendChild(this.buttons[key])
         }
+        this.buttons['danmaku-config'].appendChild(this.DanmakuConfig.container)
     }
     fadeOut() {
         this.show()

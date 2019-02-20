@@ -1,0 +1,44 @@
+.fake-player-danmaku-config {
+    position: absolute;
+    padding: 10px 12px;
+    font-size: 12px;
+    color: #fff;
+    background-color: rgba(24, 24, 24, .9);
+    border-radius: 2px;
+    user-select: none;
+    .slider-section {
+        display: flex;
+        height: 20px;
+        margin-top: 20px;
+        .title {
+            width: 60px;
+            line-height: 20px;
+        }
+        .content {
+            width: 146px;
+            .fake-player-slider {
+                margin-top: 4px;
+                width: 140px;
+            }
+        }
+    }
+    .block-section {
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            padding: 0 10px;
+            fill: #fff;
+            .button {
+                cursor: pointer;
+                .title {
+                    text-align: center;
+                }
+                .image {
+                    width: 28px;
+                    height: 28px;
+                }
+            }
+        }
+    }
+}
