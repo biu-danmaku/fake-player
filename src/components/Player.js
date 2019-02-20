@@ -21,16 +21,10 @@ class Player {
       buttonClickHandler: (button) => {
         switch (button) {
           case 'play':
-            this.toggle()
+            this.togglePlay()
             break
           case 'full-window':
-            if (this.container.classList.contains('full-window')) {
-              this.container.classList.remove('full-window')
-              this.controls.activeButton('full-window', false)
-            } else {
-              this.container.classList.add('full-window')
-              this.controls.activeButton('full-window')
-            }
+            this.toggleFullWindow()
             break
           case 'full-screen':
             if (this.fullScreen) {
@@ -114,11 +108,16 @@ class Player {
     this.timer = undefined
     if (this.fp.onpause) this.fp.onpause()
   }
-  toggle() {
-    if (this.playing) {
-      this.pause()
+  togglePlay() {
+    this.playing ? this.pause() : this.play()
+  }
+  toggleFullWindow() {
+    if (this.container.classList.contains('full-window')) {
+      this.container.classList.remove('full-window')
+      this.controls.activeButton('full-window', false)
     } else {
-      this.play()
+      this.container.classList.add('full-window')
+      this.controls.activeButton('full-window')
     }
   }
   get playing() {
