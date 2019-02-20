@@ -15,7 +15,7 @@ class Player {
 
     this.screen = document.createElement('div')
     this.screen.classList.add('screen')
-    this.screen.addEventListener('click', () => this.toggle())
+    this.screen.addEventListener('click', () => this.togglePlay())
 
     this.controls = new Controls({
       buttonClickHandler: (button) => {
