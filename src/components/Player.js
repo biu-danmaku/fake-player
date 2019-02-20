@@ -18,7 +18,7 @@ class Player {
     this.screen.addEventListener('click', () => this.toggle())
 
     this.controls = new Controls({
-      onButtonClick: (button) => {
+      buttonClickHandler: (button) => {
         switch (button) {
           case 'play':
             this.toggle()

@@ -7,7 +7,7 @@ import svgFullWindowCancel from '@/images/full-window-cancel.svg'
 import svgFullScreen       from '@/images/full-screen.svg'
 
 class Controls {
-    constructor({ onButtonClick, progressBarEventHandler }) {
+    constructor({ buttonClickHandler, progressBarEventHandler }) {
         this.hideTimer = null
 
         this.container = document.createElement('div')
@@ -38,15 +38,15 @@ class Controls {
 
         this.buttons['play'].innerHTML = svgPlay
         this.buttons['play'].classList.add('button', 'play')
-        this.buttons['play'].onclick = () => onButtonClick('play')
+        this.buttons['play'].onclick = () => buttonClickHandler('play')
 
         this.buttons['full-window'].classList.add('button', 'full-window')
         this.buttons['full-window'].innerHTML = svgFullWindow
-        this.buttons['full-window'].onclick = () => onButtonClick('full-window')
+        this.buttons['full-window'].onclick = () => buttonClickHandler('full-window')
 
         this.buttons['full-screen'].classList.add('button', 'full-screen')
         this.buttons['full-screen'].innerHTML = svgFullScreen
-        this.buttons['full-screen'].onclick = () => onButtonClick('full-screen')
+        this.buttons['full-screen'].onclick = () => buttonClickHandler('full-screen')
 
         for (let key in this.buttons) {
             this.container.appendChild(this.buttons[key])
