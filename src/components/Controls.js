@@ -1,10 +1,10 @@
 import ProgressBar from '@/widgets/ProgressBar'
 
-import svgPlay from '@/images/play.svg'
-import svgPause from '@/images/pause.svg'
-import svgFullWindow from '@/images/full-window.svg'
+import svgPlay             from '@/images/play.svg'
+import svgPause            from '@/images/pause.svg'
+import svgFullWindow       from '@/images/full-window.svg'
 import svgFullWindowCancel from '@/images/full-window-cancel.svg'
-import svgFullScreen from '@/images/full-screen.svg'
+import svgFullScreen       from '@/images/full-screen.svg'
 
 class Controls {
     constructor({
@@ -24,10 +24,10 @@ class Controls {
         this.container.appendChild(mask)
 
         this.progressBar = new ProgressBar({
-            onHover: (rate) => onProgressHover(rate),
-            onMove: (rate) => onProgressMove(rate),
+            onHover:  (rate) => onProgressHover(rate),
+            onMove:   (rate) => onProgressMove(rate),
             onChange: (rate) => onProgressChange(rate),
-            mountTo: this.container,
+            mountTo:  this.container,
         })
 
         let timeBox = document.createElement('div')
@@ -36,6 +36,7 @@ class Controls {
         this.duration = document.createElement('span')
         timeBox.appendChild(this.time)
         timeBox.appendChild(this.duration)
+        this.container.appendChild(timeBox)
 
         this.buttons = {
             'play':        document.createElement('div'),
@@ -47,7 +48,6 @@ class Controls {
         this.buttons['play'].classList.add('button', 'play')
         this.buttons['play'].onclick = () => onButtonClick('play')
 
-        this.container.appendChild(timeBox)
         this.buttons['full-window'].classList.add('button', 'full-window')
         this.buttons['full-window'].innerHTML = svgFullWindow
         this.buttons['full-window'].onclick = () => onButtonClick('full-window')
