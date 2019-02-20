@@ -2,6 +2,7 @@ import ProgressBar from '@/widgets/ProgressBar'
 
 import svgPlay             from '@/images/play.svg'
 import svgPause            from '@/images/pause.svg'
+import svgDanmakuConfig    from '@/images/danmaku-config.svg'
 import svgFullWindow       from '@/images/full-window.svg'
 import svgFullWindowCancel from '@/images/full-window-cancel.svg'
 import svgFullScreen       from '@/images/full-screen.svg'
@@ -31,14 +32,18 @@ class Controls {
         this.container.appendChild(timeBox)
 
         this.buttons = {
-            'play':        document.createElement('div'),
-            'full-window': document.createElement('div'),
-            'full-screen': document.createElement('div'),
+            'play':           document.createElement('div'),
+            'danmaku-config': document.createElement('div'),
+            'full-window':    document.createElement('div'),
+            'full-screen':    document.createElement('div'),
         }
 
         this.buttons['play'].innerHTML = svgPlay
         this.buttons['play'].classList.add('button', 'play')
         this.buttons['play'].onclick = () => buttonClickHandler('play')
+
+        this.buttons['danmaku-config'].classList.add('button', 'danmaku-config')
+        this.buttons['danmaku-config'].innerHTML = svgDanmakuConfig
 
         this.buttons['full-window'].classList.add('button', 'full-window')
         this.buttons['full-window'].innerHTML = svgFullWindow
