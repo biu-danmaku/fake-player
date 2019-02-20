@@ -7,13 +7,7 @@ import svgFullWindowCancel from '@/images/full-window-cancel.svg'
 import svgFullScreen       from '@/images/full-screen.svg'
 
 class Controls {
-    constructor({
-        // 向 player 传递的事件
-        onButtonClick,
-        onProgressHover,    // 鼠标在悬停在进度条上
-        onProgressMove,     // 拖拽进度条
-        onProgressChange,   // 改变进度
-    }) {
+    constructor({ onButtonClick, progressBarEventHandler }) {
         this.hideTimer = null
 
         this.container = document.createElement('div')
@@ -24,10 +18,8 @@ class Controls {
         this.container.appendChild(mask)
 
         this.progressBar = new ProgressBar({
-            onHover:  (rate) => onProgressHover(rate),
-            onMove:   (rate) => onProgressMove(rate),
-            onChange: (rate) => onProgressChange(rate),
-            mountTo:  this.container,
+            eventHandler: progressBarEventHandler.bind(this),
+            mountTo:      this.container,
         })
 
         let timeBox = document.createElement('div')

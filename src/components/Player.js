@@ -51,20 +51,23 @@ class Player {
             break
         }
       },
-
-      onProgressHover: (rate) => {
-        this.controls.progressBar.timeText = utils.ms2text(rate * this.duration)
+      progressBarEventHandler: (event, rate) => {
+        switch (event) {
+          case 'hover':
+            this.controls.progressBar.timeText = utils.ms2text(rate * this.duration)
+            break
+          case 'move':
+            this.controls.timeText = this.controls.progressBar.timeText = utils.ms2text(rate * this.duration)
+            break
+          case 'change':
+            this.time = rate * this.duration
+            this.lastTickAt = Date.now()
+            if (this.fp.onchange) {
+              this.fp.onchange(this.time)
+            }
+            break
+        }
       },
-
-      onProgressMove: (rate) => {
-        this.controls.timeText = this.controls.progressBar.timeText = utils.ms2text(rate * this.duration)
-      },
-      
-      onProgressChange: (rate) => {
-        this.time = rate * this.duration
-        this.lastTickAt = Date.now()
-        if (this.fp.onchange) this.fp.onchange(this.time)
-      }
     })
     
     this.container.onmousemove = () => {

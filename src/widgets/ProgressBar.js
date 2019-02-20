@@ -1,5 +1,5 @@
 class ProgressBar {
-    constructor({ mountTo, onHover, onMove, onChange }) {
+    constructor({ mountTo, eventHandler }) {
         this.container = document.createElement('div')
         this.container.classList.add('fake-player-progress-bar')
 
@@ -18,11 +18,11 @@ class ProgressBar {
 
         this.container.appendChild(wrap)
 
-        let hoverHandler = (e) => onHover(this.attachTime(e))
+        let hoverHandler = (e) => eventHandler('hover', this.attachTime(e))
         let dragHandler = (e) => {
             let rate = this.attachTime(e)
             this.rate = rate
-            onMove(rate)
+            eventHandler('move', rate)
         }
         let upHandler = (e) => {
             if (e.button === 0) {
@@ -31,7 +31,7 @@ class ProgressBar {
                 document.removeEventListener('mouseup', upHandler)
                 this.container.addEventListener('mousemove', hoverHandler)
                 this.container.addEventListener('mousemove', hoverHandler)
-                onChange(this.attachTime(e))
+                eventHandler('change', this.attachTime(e))
             }
         }
         this.container.addEventListener('mousemove', hoverHandler)
@@ -43,7 +43,7 @@ class ProgressBar {
                 document.addEventListener('mouseup', upHandler)
                 let rate = this.attachTime(e)
                 this.rate = rate
-                onMove(rate)
+                eventHandler('move', rate)
             }
         }
 
