@@ -35,23 +35,21 @@ class DanmakuConfig {
         }
 
         this.sliders = {
-            '不透明度': new Slider({
-                onChange: (value) => sliderValueChangeHandler('opacity', value)
-            }),
-            '弹幕速度': new Slider({
-                scales:   ['极慢', '', '适中', '', '超快'],
-                onChange: (value) => sliderValueChangeHandler('speed', value)
-            }),
-            '字体大小': new Slider({
-                scales:   ['极小', '', '适中', '', '超大'],
-                onChange: (value) => sliderValueChangeHandler('font-size', value)
-            })
+            'opacity': {
+                title:  '不透明度'
+            },
+            'speed': {
+                title:  '弹幕速度',
+                scales: ['极慢', '', '适中', '', '超快']
+            },
+            'font-size': {
+                title:  '字体大小',
+                scales: ['极小', '', '适中', '', '超大']
+            }
         }
 
-        renderBlockSection.call(this, buttonClickHandler)
-        Object.entries(this.sliders).forEach(entry => {
-            createSliderSection(this.container, entry[0]).appendChild(entry[1].container)
-        })
+        renderBlockButtons.call(this, buttonClickHandler)
+        renderSliders.call(this, sliderValueChangeHandler)
     }
     activeButton(key, active = true) {
         if (this.blockButtons[key]) {
@@ -73,21 +71,30 @@ class DanmakuConfig {
 
 export default DanmakuConfig
 
-function createSliderSection(container, title) {
-    let titleElement = document.createElement('div')
-    titleElement.classList.add('title')
-    titleElement.innerText = title
-    let content = document.createElement('div')
-    content.classList.add('content')
-    let section = document.createElement('div')
-    section.classList.add('slider-section')
-    section.appendChild(titleElement)
-    section.appendChild(content)
-    container.appendChild(section)
-    return content
+function renderSliders(valueChangeHandler) {
+    Object.entries(this.sliders).forEach(([ key, slider ]) => {
+        let titleElement = document.createElement('div')
+        titleElement.classList.add('title')
+        titleElement.innerText = slider.title
+
+        let content = document.createElement('div')
+        content.classList.add('content')
+
+        slider.obj = new Slider({
+            scales:   slider.scales,
+            onChange: (value) => valueChangeHandler(key, value)
+        })
+        content.appendChild(slider.obj.container)
+
+        let section = document.createElement('div')
+        section.classList.add('slider-section')
+        section.appendChild(titleElement)
+        section.appendChild(content)
+        this.container.appendChild(section)
+    })
 }
 
-function renderBlockSection(clickHandler) {
+function renderBlockButtons(clickHandler) {
     let section = document.createElement('div')
     section.classList.add('block-section')
     section.appendChild(document.createRange().createContextualFragment('<div>按类型屏蔽</div>'))
@@ -96,9 +103,7 @@ function renderBlockSection(clickHandler) {
     buttons.classList.add('buttons')
     section.appendChild(buttons)
 
-    Object.entries(this.blockButtons).forEach(entry => {
-        let [ key, button ] = entry
-
+    Object.entries(this.blockButtons).forEach(([ key, button ]) => {
         button.element = document.createElement('div')
         button.element.classList.add('button')
         button.element.onclick = () => clickHandler(key)
