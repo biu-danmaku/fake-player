@@ -24,7 +24,7 @@ class Controls {
             eventHandler: progressBarEventHandler,
         })
 
-        this.DanmakuConfig = new DanmakuConfig({
+        this.danmakuConfig = new DanmakuConfig({
             sliderValueChangeHandler: (key, value) => console.log(key, value),
             buttonClickHandler,
         })
@@ -72,7 +72,7 @@ class Controls {
                 button.element.innerHTML = active ? button.image[1] : button.image[0]
             }
         } else {
-            this.DanmakuConfig.activeButton(key, active)
+            this.danmakuConfig.activeButton(key, active)
         }
     }
 }
@@ -99,7 +99,7 @@ function render(buttonClickHandler) {
 
 
     renderButtons.call(this, buttonClickHandler)
-    this.buttons['danmaku-config'].element.appendChild(this.DanmakuConfig.container)
+    this.buttons['danmaku-config'].element.appendChild(this.danmakuConfig.container)
 }
 
 function renderButtons(clickHandler) {
