@@ -24,14 +24,12 @@ class Slider {
             for (let i = 0; i < args.scales.length; i++) {
                 let scale = document.createElement('div')
                 scale.classList.add('scale')
-                let leftRate = i / (args.scales.length - 1)
-                scale.style['left'] = leftRate * 100 + '%'
+                let leftPercent = i / (args.scales.length - 1) * 100
+                scale.style['left'] = leftPercent + '%'
                 if (i === 1) {
-                    oneStep = leftRate / 2
+                    oneStep = leftPercent / 2
                 }
-                this.scales[i] = {
-                    leftRate: leftRate
-                }
+                this.scales[i] = { leftPercent }
                 if (args.scales[i]) {
                     let text = document.createElement('span')
                     text.innerText = args.scales[i]
@@ -42,7 +40,7 @@ class Slider {
                 this.container.appendChild(scalesContainer)
             }
             for (let i = 0; i < this.scales.length - 1; i++) {
-                this.scales[i].stepBefore = this.scales[i + 1].leftRate - oneStep
+                this.scales[i].stepBeforeRate = (this.scales[i + 1].leftPercent - oneStep) / 100
             }
         } else {
             this.current = document.createElement('div')
@@ -59,7 +57,7 @@ class Slider {
             let rate = (e.clientX - this.left) / this.width
             if (this.scales) {
                 for (let i = 0; i < this.scales.length - 1; i++) {
-                    if (rate < this.scales[i].stepBefore) {
+                    if (rate < this.scales[i].stepBeforeRate) {
                         this.step = i
                         return
                     }
@@ -96,14 +94,14 @@ class Slider {
         }
     } */
     set rate(rate) {
-        if (rate < 0) rate = 0
-        else if (rate > 1) rate = 1
+        rate = Math.max(0, rate)
+        rate = Math.min(1, rate)
         this.current.style['width'] = (rate * 100) + '%'
-        this.dot.style['left'] = rate * this.width + 'px'
+        this.dot.style['left'] = (rate * 100) + '%'
         this.value = rate
     }
     set step(step) {
-        this.dot.style['left'] = this.scales[step].leftRate * this.width + 'px'
+        this.dot.style['left'] = this.scales[step].leftPercent + '%'
         this.value = step
     }
     set mainColor(color) {
