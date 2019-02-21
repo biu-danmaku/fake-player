@@ -14,27 +14,39 @@
 新建一个播放器：
 ```js
 const player = new FakePlayer({
-  // 创建播放器时必须提供容器
-  // 可以是 CSS 选择器或 HTMLElement 实例
-  container: '.player-box',
-  // "视频"时长, 毫秒
-  duration: 300,
+    // 创建播放器时必须提供容器
+    // 可以是 CSS 选择器或 HTMLElement 实例
+    container: '.player-box',
+    // "视频"时长(毫秒)
+    duration: 300,
 })
 ```
 
-FakePlayer 未提供任何 API，而是提供了以下几个事件：
+### API
+- `player.on(eventName, handler)` 监听播放器[事件](#事件)
+
+### 事件
+1. `play`，点击播放按钮：
 ```js
-player.onplay = function (time) {
-  // 点击播放按钮
-  // time 为当前播放时间
-}
-player.onpause = function () {
-  // 点击暂停按钮
-}
-player.onchange = function (time) {
-  // 拖拽进度条改变播放时间
-  // time 为当前播放时间
-}
+player.on('play', function (time) {
+    // time 为当前播放时间(毫秒)
+    // ...
+})
+```
+
+2. `pause`，点击暂停按钮：
+```js
+player.on('pause', function () {
+    // ...
+})
+```
+
+3. `change`，拖拽进度条改变播放时间：
+```js
+player.on('change', function (time) {
+    // time 为当前播放时间(毫秒)
+    // ...
+})
 ```
 
 ### 属性
