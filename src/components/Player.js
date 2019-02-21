@@ -43,6 +43,19 @@ class Player {
               this.fullScreen = true
             }
             break
+          case 'block-scroll':
+            this.controls.activeButton(button)
+            break
+          case 'block-top':
+            this.controls.activeButton(button)
+            break
+          case 'block-bottom':
+            this.controls.activeButton(button)
+            break
+          case 'block-color':
+            this.controls.activeButton(button)
+            break
+          
         }
       },
       progressBarEventHandler: (event, rate) => {

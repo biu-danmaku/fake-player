@@ -25,13 +25,13 @@ class Controls {
         this.container.appendChild(mask)
 
         this.progressBar = new ProgressBar({
-            eventHandler: progressBarEventHandler.bind(this),
+            eventHandler: progressBarEventHandler,
             mountTo:      this.container,
         })
 
         this.DanmakuConfig = new DanmakuConfig({
             sliderValueChangeHandler: (key, value) => console.log(key, value),
-            buttonClickHandler:       buttonClickHandler.bind(this)
+            buttonClickHandler,
         })
 
         let timeBox = document.createElement('div')
@@ -96,6 +96,8 @@ class Controls {
             case 'full-window':
                 this.buttons['full-window'].innerHTML = active ? svgFullWindowCancel : svgFullWindow
                 break
+            default:
+                this.DanmakuConfig.activeButton(button, active)
         }
     }
 }

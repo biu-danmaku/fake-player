@@ -11,23 +11,24 @@ import iDanmakuColorActive  from '@/images/danmaku-color-active.svg'
 
 class DanmakuConfig {
     constructor({ buttonClickHandler, sliderValueChangeHandler }) {
+        this._mainColor = '#f00'
         this.container = document.createElement('div')
         this.container.classList.add('fake-player-danmaku-config')
 
         this.blockButtons = {
-            scroll: {
+            'block-scroll': {
                 title: '滚动',
                 image: [ iDanmakuScroll, iDanmakuScrollActive ],
             },
-            top:    {
+            'block-top':    {
                 title: '顶部',
                 image: [ iDanmakuTop, iDanmakuTopActive ]
             },
-            bottom: {
+            'block-bottom': {
                 title: '底部',
                 image: [ iDanmakuBottom, iDanmakuBottomActive ]
             },
-            color:  {
+            'block-color':  {
                 title: '彩色',
                 image: [ iDanmakuColor, iDanmakuColorActive ]
             },
@@ -48,13 +49,24 @@ class DanmakuConfig {
         }
 
         renderBlockSection.call(this, buttonClickHandler)
-        console.log(this.blockButtons)
         Object.entries(this.sliders).forEach(entry => {
             createSliderSection(this.container, entry[0]).appendChild(entry[1].container)
         })
     }
-
+    activeButton(key, active = true) {
+        if (this.blockButtons[key]) {
+            let button = this.blockButtons[key]
+            if (active) {
+                button.imageElement.innerHTML = button.image[1]
+                button.element.style['fill'] = button.element.style['color'] = this._mainColor
+            } else {
+                button.imageElement.innerHTML = button.image[0]
+                button.element.style['fill'] = button.element.style['color'] = ''
+            }
+        }
+    }
     set mainColor(color) {
+        this._mainColor = color
         Object.values(this.sliders).forEach(slider => slider.mainColor = color)
     }
 }
@@ -89,7 +101,7 @@ function renderBlockSection(clickHandler) {
 
         button.element = document.createElement('div')
         button.element.classList.add('button')
-        button.element.onclick = () => clickHandler('block-' + key)
+        button.element.onclick = () => clickHandler(key)
 
         button.imageElement = document.createElement('div')
         button.imageElement.classList.add('image')
