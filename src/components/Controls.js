@@ -2,12 +2,12 @@ import DanmakuConfig from './DanmakuConfig'
 
 import ProgressBar from '@/widgets/ProgressBar'
 
-import svgPlay             from '@/images/play.svg'
-import svgPause            from '@/images/pause.svg'
-import svgDanmakuConfig    from '@/images/danmaku-config.svg'
-import svgFullWindow       from '@/images/full-window.svg'
-import svgFullWindowCancel from '@/images/full-window-cancel.svg'
-import svgFullScreen       from '@/images/full-screen.svg'
+import iPlay             from '@/images/play.svg'
+import iPause            from '@/images/pause.svg'
+import iDanmakuConfig    from '@/images/danmaku-config.svg'
+import iFullWindow       from '@/images/full-window.svg'
+import iFullWindowActive from '@/images/full-window-active.svg'
+import iFullScreen       from '@/images/full-screen.svg'
 
 class Controls {
     constructor({
@@ -16,17 +16,12 @@ class Controls {
         sliderValueChangeHandler,
     }) {
         this.hideTimer = null
-
-        this.container = document.createElement('div')
-        this.container.classList.add('fake-player-controls')
-
-        let mask = document.createElement('div')
-        mask.classList.add('mask')
-        this.container.appendChild(mask)
+        this.container = undefined
+        this.time = undefined
+        this.duration = undefined
 
         this.progressBar = new ProgressBar({
             eventHandler: progressBarEventHandler,
-            mountTo:      this.container,
         })
 
         this.DanmakuConfig = new DanmakuConfig({
@@ -34,40 +29,22 @@ class Controls {
             buttonClickHandler,
         })
 
-        let timeBox = document.createElement('div')
-        timeBox.classList.add('time-box')
-        this.time = document.createElement('span')
-        this.duration = document.createElement('span')
-        timeBox.appendChild(this.time)
-        timeBox.appendChild(this.duration)
-        this.container.appendChild(timeBox)
-
         this.buttons = {
-            'play':           document.createElement('div'),
-            'danmaku-config': document.createElement('div'),
-            'full-window':    document.createElement('div'),
-            'full-screen':    document.createElement('div'),
+            'play': {
+                image: [ iPlay, iPause ]
+            },
+            'danmaku-config': {
+                image: [ iDanmakuConfig ]
+            },
+            'full-window': {
+                image: [ iFullWindow, iFullWindowActive ]
+            },
+            'full-screen': {
+                image: iFullScreen
+            }
         }
 
-        this.buttons['play'].innerHTML = svgPlay
-        this.buttons['play'].classList.add('button', 'play')
-        this.buttons['play'].onclick = () => buttonClickHandler('play')
-
-        this.buttons['danmaku-config'].classList.add('button', 'danmaku-config')
-        this.buttons['danmaku-config'].innerHTML = svgDanmakuConfig
-
-        this.buttons['full-window'].classList.add('button', 'full-window')
-        this.buttons['full-window'].innerHTML = svgFullWindow
-        this.buttons['full-window'].onclick = () => buttonClickHandler('full-window')
-
-        this.buttons['full-screen'].classList.add('button', 'full-screen')
-        this.buttons['full-screen'].innerHTML = svgFullScreen
-        this.buttons['full-screen'].onclick = () => buttonClickHandler('full-screen')
-
-        for (let key in this.buttons) {
-            this.container.appendChild(this.buttons[key])
-        }
-        this.buttons['danmaku-config'].appendChild(this.DanmakuConfig.container)
+        render.call(this, buttonClickHandler)
     }
     fadeOut() {
         this.show()
@@ -88,18 +65,53 @@ class Controls {
     set timeText(value) {
         this.time.innerText = value
     }
-    activeButton(button, active = true) {
-        switch(button) {
-            case 'play':
-                this.buttons['play'].innerHTML = active ? svgPause : svgPlay
-                break
-            case 'full-window':
-                this.buttons['full-window'].innerHTML = active ? svgFullWindowCancel : svgFullWindow
-                break
-            default:
-                this.DanmakuConfig.activeButton(button, active)
+    activeButton(key, active = true) {
+        if (this.buttons[key]) {
+            let button = this.buttons[key]
+            if (button.image instanceof Array && button.image.length > 1) {
+                button.element.innerHTML = active ? button.image[1] : button.image[0]
+            }
+        } else {
+            this.DanmakuConfig.activeButton(key, active)
         }
     }
 }
 
 export default Controls
+
+function render(buttonClickHandler) {
+    this.container = document.createElement('div')
+    this.container.classList.add('fake-player-controls')
+    
+    let mask = document.createElement('div')
+    mask.classList.add('mask')
+    this.container.appendChild(mask)
+
+    this.container.appendChild(this.progressBar.container)
+
+    let timeBox = document.createElement('div')
+    timeBox.classList.add('time-box')
+    this.time = document.createElement('span')
+    this.duration = document.createElement('span')
+    timeBox.appendChild(this.time)
+    timeBox.appendChild(this.duration)
+    this.container.appendChild(timeBox)
+
+
+    renderButtons.call(this, buttonClickHandler)
+    this.buttons['danmaku-config'].element.appendChild(this.DanmakuConfig.container)
+}
+
+function renderButtons(clickHandler) {
+    Object.entries(this.buttons).forEach(([ key, button ]) => {
+        button.element = document.createElement('div')
+        if (button.image instanceof Array) {
+            button.element.innerHTML = button.image[0]
+        } else {
+            button.element.innerHTML = button.image
+        }
+        button.element.classList.add('button', key)
+        button.element.onclick = () => clickHandler(key)
+        this.container.appendChild(button.element)
+    })
+}

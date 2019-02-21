@@ -1,5 +1,5 @@
 class ProgressBar {
-    constructor({ mountTo, eventHandler }) {
+    constructor({ eventHandler }) {
         this.container = document.createElement('div')
         this.container.classList.add('fake-player-progress-bar')
 
@@ -48,7 +48,6 @@ class ProgressBar {
         }
 
         this.timeText = '00:00'
-        mountTo.appendChild(this.container)
     }
     attachTime(e) {
         let { left, width } = this.container.getBoundingClientRect()
