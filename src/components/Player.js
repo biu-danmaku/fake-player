@@ -2,8 +2,8 @@ import Controls from './Controls'
 import * as utils from '@/utils'
 
 class Player {
-  constructor(fp) {
-    this.fp = fp
+  constructor(events) {
+    this.events = events
     this._duration = 0
     this._time = 0
     this.timer = undefined
@@ -55,7 +55,6 @@ class Player {
           case 'block-color':
             this.controls.activeButton(button)
             break
-          
         }
       },
       progressBarEventHandler: (event, rate) => {
@@ -69,8 +68,8 @@ class Player {
           case 'change':
             this.time = rate * this.duration
             this.lastTickAt = Date.now()
-            if (this.fp.onchange) {
-              this.fp.onchange(this.time)
+            if (this.events.has('change')) {
+              this.events.get('change').forEach(h => h(this.time))
             }
             break
         }
@@ -110,7 +109,9 @@ class Player {
       }
       this.lastTickAt = now
     }, 100)
-    if (this.fp.onplay) this.fp.onplay(this.time)
+    if (this.events.has('play')) {
+      this.events.get('play').forEach(h => h(this.time))
+    }
   }
   pause() {
     if ( ! this.playing) return
@@ -119,7 +120,9 @@ class Player {
     this.controls.show()
     this.controls.activeButton('play', false)
     this.timer = undefined
-    if (this.fp.onpause) this.fp.onpause()
+    if (this.events.has('pause')) {
+      this.events.get('pause').forEach(h => h())
+    }
   }
   togglePlay() {
     this.playing ? this.pause() : this.play()

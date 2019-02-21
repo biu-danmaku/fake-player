@@ -26,15 +26,15 @@
     duration: 300,
   })
   const actionTip = document.querySelector('.action-tip')
-  player.onplay = function (time) {
+  player.on('play', function (time) {
     actionTip.innerText = 'Play at ' + time + ' ms'
-  }
-  player.onpause = function () {
+  })
+  player.on('pause', function () {
     actionTip.innerText = 'Pause'
-  }
-  player.onchange = function (time) {
+  })
+  player.on('change', function (time) {
     actionTip.innerText = 'Time changed to ' + time + ' ms'
-  }
+  })
 </script>
 </body>
 </html>
