@@ -1,9 +1,13 @@
 import Slider from '@/widgets/Slider'
 
-import svgDanmakuScroll from '@/images/danmaku-scroll.svg'
-import svgDanmakuTop    from '@/images/danmaku-top.svg'
-import svgDanmakuBottom from '@/images/danmaku-bottom.svg'
-import svgDanmakuColor  from '@/images/danmaku-color.svg'
+import iDanmakuScroll       from '@/images/danmaku-scroll.svg'
+import iDanmakuScrollActive from '@/images/danmaku-scroll-active.svg'
+import iDanmakuTop          from '@/images/danmaku-top.svg'
+import iDanmakuTopActive    from '@/images/danmaku-top-active.svg'
+import iDanmakuBottom       from '@/images/danmaku-bottom.svg'
+import iDanmakuBottomActive from '@/images/danmaku-bottom-active.svg'
+import iDanmakuColor        from '@/images/danmaku-color.svg'
+import iDanmakuColorActive  from '@/images/danmaku-color-active.svg'
 
 class DanmakuConfig {
     constructor({ buttonClickHandler, sliderValueChangeHandler }) {
@@ -13,19 +17,19 @@ class DanmakuConfig {
         this.blockButtons = {
             scroll: {
                 title: '滚动',
-                image: [ svgDanmakuScroll ],
+                image: [ iDanmakuScroll, iDanmakuScrollActive ],
             },
             top:    {
                 title: '顶部',
-                image: [ svgDanmakuTop ]
+                image: [ iDanmakuTop, iDanmakuTopActive ]
             },
             bottom: {
                 title: '底部',
-                image: [ svgDanmakuBottom ]
+                image: [ iDanmakuBottom, iDanmakuBottomActive ]
             },
             color:  {
                 title: '彩色',
-                image: [ svgDanmakuColor ]
+                image: [ iDanmakuColor, iDanmakuColorActive ]
             },
         }
 
