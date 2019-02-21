@@ -10,6 +10,7 @@
         height: 3px;
         background-color: rgba(255, 255, 255, .6);
         border-radius: 2px;
+        user-select: none;
         .played {
             position: absolute;
             background-color: #f00;
