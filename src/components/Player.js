@@ -1,5 +1,5 @@
 import Controls from './Controls'
-import * as utils from '@/utils'
+import utils from '@/utils'
 
 class Player {
     constructor(events) {

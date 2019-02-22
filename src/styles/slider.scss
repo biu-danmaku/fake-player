@@ -1,16 +1,17 @@
 .fake-player-slider {
     $background-color: #606060;
-    position: absolute;
+    $main-color: #f00;
     display: flex;
     align-items: center;
+    padding: 0 6px;
     min-height: 12px;
     min-width: 2px;
     user-select: none;
     cursor: pointer;
-    .scales {
-        position: absolute;
-        width: 100%;
+    .wrap {
+        position: relative;
         height: 4px;
+        width: 100%;
         pointer-events: none;
         .scale {
             position: absolute;
@@ -44,26 +45,27 @@
                 }
             }
         }
-    }
-    .progress {
-        position: absolute;
-        height: 2px;
-        width: 100%;
-        border-radius: 1px;
-        background-color: $background-color;
-        .current {
+        .progress {
             position: absolute;
-            background-color: #f00;
-            height: 100%;
-            width: 0;
-        }
-        .dot {
-            position: absolute;
-            background-color: #f00;
-            height: 12px;
-            width: 12px;
-            border-radius: 50%;
-            transform: translate(-6px, -5px);
+            top: 1px;
+            height: 2px;
+            width: 100%;
+            border-radius: 1px;
+            background-color: $background-color;
+            .current {
+                position: absolute;
+                background-color: $main-color;
+                height: 100%;
+                width: 0;
+            }
+            .dot {
+                position: absolute;
+                background-color: $main-color;
+                height: 12px;
+                width: 12px;
+                border-radius: 50%;
+                transform: translate(-6px, -5px);
+            }
         }
     }
 }

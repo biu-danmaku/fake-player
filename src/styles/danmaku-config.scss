@@ -12,15 +12,12 @@
         height: 20px;
         margin-top: 20px;
         .title {
-            width: 60px;
+            width: 56px;
             line-height: 20px;
         }
         .content {
-            width: 146px;
-            .fake-player-slider {
-                margin-top: 4px;
-                width: 140px;
-            }
+            padding: 4px 0;
+            width: 160px;
         }
     }
     .block-section {

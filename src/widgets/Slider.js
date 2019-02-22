@@ -1,29 +1,27 @@
+import utils from '@/utils'
+
 class Slider {
     constructor(args) {
-        this.container = document.createElement('div')
-        this.container.classList.add('fake-player-slider')
+        this.container = utils.div('fake-player-slider')
 
         this.left     = undefined
         this.width    = undefined
         this.scales   = undefined
         this.onChange = undefined
-        this.value    = undefined
 
         if (args && args.onChange) {
             this.onChange = args.onChange
         }
 
-        let progress = document.createElement('div')
-        progress.classList.add('progress')
+        let wrap     = utils.div('wrap'),
+            progress = utils.div('progress'),
+            scales   = utils.div('scales')
 
         if (args && args.scales) {
             this.scales = new Array(args.scales.length)
             let oneStep = undefined
-            let scalesContainer = document.createElement('div')
-            scalesContainer.classList.add('scales')
             for (let i = 0; i < args.scales.length; i++) {
-                let scale = document.createElement('div')
-                scale.classList.add('scale')
+                let scale = utils.div('scale')
                 let leftPercent = i / (args.scales.length - 1) * 100
                 scale.style['left'] = leftPercent + '%'
                 if (i === 1) {
@@ -31,46 +29,47 @@ class Slider {
                 }
                 this.scales[i] = { leftPercent }
                 if (args.scales[i]) {
-                    let text = document.createElement('span')
+                    let text = utils.span('text')
                     text.innerText = args.scales[i]
-                    text.classList.add('text')
                     scale.appendChild(text)
                 }
-                scalesContainer.appendChild(scale)
-                this.container.appendChild(scalesContainer)
+                scales.appendChild(scale)
             }
             for (let i = 0; i < this.scales.length - 1; i++) {
                 this.scales[i].stepBeforeRate = (this.scales[i + 1].leftPercent - oneStep) / 100
             }
         } else {
-            this.current = document.createElement('div')
-            this.current.classList.add('current')
+            this.current = utils.div('current')
             progress.appendChild(this.current)
         }
-        this.dot = document.createElement('div')
-        this.dot.classList.add('dot')
+        this.dot = utils.div('dot')
         progress.appendChild(this.dot)
-
-        this.container.appendChild(progress)
+        wrap.appendChild(scales)
+        wrap.appendChild(progress)
+        this.container.appendChild(wrap)
 
         let dragHandler = (e) => {
             let rate = (e.clientX - this.left) / this.width
+            rate = Math.max(0, rate)
+            rate = Math.min(1, rate)
+
+            let value = rate
             if (this.scales) {
+                value = this.scales.length - 1
                 for (let i = 0; i < this.scales.length - 1; i++) {
                     if (rate < this.scales[i].stepBeforeRate) {
-                        this.step = i
-                        return
+                        value = i
+                        break
                     }
                 }
-                this.step = this.scales.length - 1
-            } else {
-                this.rate = rate
             }
+            this.value = value
+            return value
         }
         let upHandler = (e) => {
             if (e.button === 0) {
-                dragHandler(e)
-                if (this.onChange) this.onChange(this.value)
+                let value = dragHandler(e)
+                if (this.onChange) this.onChange(value)
                 document.removeEventListener('mouseup', upHandler)
                 document.removeEventListener('mousemove', dragHandler)
             }
@@ -86,23 +85,13 @@ class Slider {
             }
         }
     }
-    /* set value(value) {
+    set value(value) {
         if (this.scales) {
-            this.step = value
+            this.dot.style['left'] = this.scales[value].leftPercent + '%'
         } else {
-            this.rate = value
+            this.current.style['width'] = (value * 100) + '%'
+            this.dot.style['left'] = (value * 100) + '%'
         }
-    } */
-    set rate(rate) {
-        rate = Math.max(0, rate)
-        rate = Math.min(1, rate)
-        this.current.style['width'] = (rate * 100) + '%'
-        this.dot.style['left'] = (rate * 100) + '%'
-        this.value = rate
-    }
-    set step(step) {
-        this.dot.style['left'] = this.scales[step].leftPercent + '%'
-        this.value = step
     }
     set mainColor(color) {
         this.dot.style['backgroundColor'] = color
