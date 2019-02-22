@@ -41,7 +41,7 @@ class Controls {
             },
             'full-screen': {
                 image: iFullScreen
-            }
+            },
         }
 
         render.call(this, buttonClickHandler)
@@ -96,7 +96,6 @@ function render(buttonClickHandler) {
     timeBox.appendChild(this.time)
     timeBox.appendChild(this.duration)
     this.container.appendChild(timeBox)
-
 
     renderButtons.call(this, buttonClickHandler)
     this.buttons['danmaku-config'].element.appendChild(this.danmakuConfig.container)

@@ -15,7 +15,7 @@ class DanmakuConfig {
         this.container = document.createElement('div')
         this.container.classList.add('fake-player-danmaku-config')
 
-        this.blockButtons = {
+        this.buttons = {
             'block-scroll': {
                 title: '滚动',
                 image: [ iDanmakuScroll, iDanmakuScrollActive ],
@@ -48,12 +48,12 @@ class DanmakuConfig {
             }
         }
 
-        renderBlockButtons.call(this, buttonClickHandler)
+        renderButtons.call(this, buttonClickHandler)
         renderSliders.call(this, sliderValueChangeHandler)
     }
     activeButton(key, active = true) {
-        if (this.blockButtons[key]) {
-            let button = this.blockButtons[key]
+        if (this.buttons[key]) {
+            let button = this.buttons[key]
             if (active) {
                 button.imageElement.innerHTML = button.image[1]
                 button.element.style['fill'] = button.element.style['color'] = this._mainColor
@@ -94,7 +94,7 @@ function renderSliders(valueChangeHandler) {
     })
 }
 
-function renderBlockButtons(clickHandler) {
+function renderButtons(clickHandler) {
     let section = document.createElement('div')
     section.classList.add('block-section')
     section.appendChild(document.createRange().createContextualFragment('<div>按类型屏蔽</div>'))
@@ -103,7 +103,7 @@ function renderBlockButtons(clickHandler) {
     buttons.classList.add('buttons')
     section.appendChild(buttons)
 
-    Object.entries(this.blockButtons).forEach(([ key, button ]) => {
+    Object.entries(this.buttons).forEach(([ key, button ]) => {
         button.element = document.createElement('div')
         button.element.classList.add('button')
         button.element.onclick = () => clickHandler(key)

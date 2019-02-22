@@ -136,6 +136,18 @@ class Player {
             this.controls.activeButton('full-window')
         }
     }
+    applyConfig(key, value) {
+        switch (key) {
+            case 'opacity':
+                this.controls.danmakuConfig.sliders.opacity.obj.value = value
+                break
+            case 'speed':
+                this.controls.danmakuConfig.sliders.speed.obj.value = value
+                break
+            case 'fontSize':
+                this.controls.danmakuConfig.sliders['font-size'].obj.value = value
+                break
+        }
     }
     get playing() {
         return this.timer !== undefined

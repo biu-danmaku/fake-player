@@ -5,10 +5,24 @@ class FakePlayer {
         this._container = undefined
         this._player = undefined
         this._events = new Map()
-
         this._player = new Player(this._events)
+        let config = args.config || {
+            opacity:  1,
+            speed:    2,
+            fontSize: 2
+        }
+
         initContainerElement.call(this, args.container)
 
+        Object.entries(config).forEach(([ key, value ]) => {
+            switch (key) {
+                case 'opacity': 
+                case 'speed':
+                case 'fontSize':
+                    this._player.applyConfig(key, value)
+                    break
+            }
+        })
         this.duration = args.duration || 0
         this.background = args.background || '#000'
     }
