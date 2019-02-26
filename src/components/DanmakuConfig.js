@@ -1,3 +1,5 @@
+import utils from '@/utils'
+
 import Slider from '@/widgets/Slider'
 
 import iDanmakuScroll       from '@/images/danmaku-scroll.svg'
@@ -12,8 +14,7 @@ import iDanmakuColorActive  from '@/images/danmaku-color-active.svg'
 class DanmakuConfig {
     constructor({ buttonClickHandler, sliderValueChangeHandler }) {
         this._mainColor = '#f00'
-        this.container = document.createElement('div')
-        this.container.classList.add('fake-player-danmaku-config')
+        this.container = utils.div('fake-player-danmaku-config')
 
         this.buttons = {
             'block-scroll': {
@@ -51,21 +52,14 @@ class DanmakuConfig {
         renderButtons.call(this, buttonClickHandler)
         renderSliders.call(this, sliderValueChangeHandler)
     }
-    activeButton(key, active = true) {
-        if (this.buttons[key]) {
-            let button = this.buttons[key]
-            if (active) {
-                button.imageElement.innerHTML = button.image[1]
-                button.element.style['fill'] = button.element.style['color'] = this._mainColor
-            } else {
-                button.imageElement.innerHTML = button.image[0]
-                button.element.style['fill'] = button.element.style['color'] = ''
-            }
-        }
-    }
     set mainColor(color) {
         this._mainColor = color
         Object.values(this.sliders).forEach(slider => slider.mainColor = color)
+        Object.values(this.buttons).forEach(button => {
+            if (button.actived) {
+                button.active(true, color)
+            }
+        })
     }
 }
 
@@ -73,52 +67,58 @@ export default DanmakuConfig
 
 function renderSliders(valueChangeHandler) {
     Object.entries(this.sliders).forEach(([ key, slider ]) => {
-        let titleElement = document.createElement('div')
-        titleElement.classList.add('title')
+        let titleElement = utils.div('title')
         titleElement.innerText = slider.title
 
-        let content = document.createElement('div')
-        content.classList.add('content')
+        let content = utils.div('content')
 
-        slider.obj = new Slider({
+        let _slider = new Slider({
+            id:       key,
             scales:   slider.scales,
-            onChange: (value) => valueChangeHandler(key, value)
+            onChange: valueChangeHandler
         })
-        content.appendChild(slider.obj.container)
+        content.appendChild(_slider.container)
 
-        let section = document.createElement('div')
-        section.classList.add('slider-section')
+        let section = utils.div('slider-section')
         section.appendChild(titleElement)
         section.appendChild(content)
         this.container.appendChild(section)
+
+        this.sliders[key] = _slider
     })
 }
 
-function renderButtons(clickHandler) {
-    let section = document.createElement('div')
-    section.classList.add('block-section')
+function renderButtons(buttonClickHandler) {
+    let section = utils.div('block-section')
     section.appendChild(document.createRange().createContextualFragment('<div>按类型屏蔽</div>'))
 
-    let buttons = document.createElement('div')
-    buttons.classList.add('buttons')
+    let buttons = utils.div('buttons')
     section.appendChild(buttons)
 
     Object.entries(this.buttons).forEach(([ key, button ]) => {
-        button.element = document.createElement('div')
-        button.element.classList.add('button')
-        button.element.onclick = () => clickHandler(key)
+        button.id = key
+        button.element = utils.div('button')
+        button.element.onclick = () => buttonClickHandler(button)
 
-        button.imageElement = document.createElement('div')
-        button.imageElement.classList.add('image')
-        button.imageElement.innerHTML = button.image[0]
-        button.imageElement = button.imageElement
-        button.element.appendChild(button.imageElement)
+        let image = utils.div('image')
+        image.innerHTML = button.image[0]
+        button.element.appendChild(image)
 
-        let title = document.createElement('div')
-        title.classList.add('title')
+        button.active = (active = true, color = this._mainColor) => {
+            if (active) {
+                image.style['fill'] = color
+                image.innerHTML = button.image[1]
+            } else {
+                image.innerHTML = button.image[0]
+                image.style['fill'] = ''
+            }
+            button.actived = active
+        }
+
+        let title = utils.div('title')
         title.innerText = button.title
-        delete button.title
         button.element.appendChild(title)
+        delete button.title
 
         buttons.appendChild(button.element)
     })
