@@ -1,39 +1,36 @@
 import utils from '@/utils'
 
 class Slider {
-    constructor(args) {
+    constructor({ id, scales, onChange}) {
         this.container = utils.div('fake-player-slider')
 
         this.left     = undefined
         this.width    = undefined
         this.scales   = undefined
-        this.onChange = undefined
+        this.onChange = onChange
+        this.id       = id
 
-        if (args && args.onChange) {
-            this.onChange = args.onChange
-        }
+        let wrap      = utils.div('wrap'),
+            progress  = utils.div('progress'),
+            scalesEle = utils.div('scales')
 
-        let wrap     = utils.div('wrap'),
-            progress = utils.div('progress'),
-            scales   = utils.div('scales')
-
-        if (args && args.scales) {
-            this.scales = new Array(args.scales.length)
+        if (scales) {
+            this.scales = new Array(scales.length)
             let oneStep = undefined
-            for (let i = 0; i < args.scales.length; i++) {
+            for (let i = 0; i < scales.length; i++) {
                 let scale = utils.div('scale')
-                let leftPercent = i / (args.scales.length - 1) * 100
+                let leftPercent = i / (scales.length - 1) * 100
                 scale.style['left'] = leftPercent + '%'
                 if (i === 1) {
                     oneStep = leftPercent / 2
                 }
                 this.scales[i] = { leftPercent }
-                if (args.scales[i]) {
+                if (scales[i]) {
                     let text = utils.span('text')
-                    text.innerText = args.scales[i]
+                    text.innerText = scales[i]
                     scale.appendChild(text)
                 }
-                scales.appendChild(scale)
+                scalesEle.appendChild(scale)
             }
             for (let i = 0; i < this.scales.length - 1; i++) {
                 this.scales[i].stepBeforeRate = (this.scales[i + 1].leftPercent - oneStep) / 100
@@ -44,14 +41,12 @@ class Slider {
         }
         this.dot = utils.div('dot')
         progress.appendChild(this.dot)
-        wrap.appendChild(scales)
+        wrap.appendChild(scalesEle)
         wrap.appendChild(progress)
         this.container.appendChild(wrap)
 
         let dragHandler = (e) => {
             let rate = (e.clientX - this.left) / this.width
-            rate = Math.max(0, rate)
-            rate = Math.min(1, rate)
 
             let value = rate
             if (this.scales) {
@@ -64,12 +59,11 @@ class Slider {
                 }
             }
             this.value = value
-            return value
         }
         let upHandler = (e) => {
             if (e.button === 0) {
-                let value = dragHandler(e)
-                if (this.onChange) this.onChange(value)
+                dragHandler(e)
+                this.onChange(this)
                 document.removeEventListener('mouseup', upHandler)
                 document.removeEventListener('mousemove', dragHandler)
             }
@@ -87,11 +81,19 @@ class Slider {
     }
     set value(value) {
         if (this.scales) {
+            value = Math.max(value, 0)
+            value = Math.min(value, this.scales.length)
             this.dot.style['left'] = this.scales[value].leftPercent + '%'
         } else {
+            value = Math.max(value, 0)
+            value = Math.min(value, 1)
             this.current.style['width'] = (value * 100) + '%'
             this.dot.style['left'] = (value * 100) + '%'
         }
+        this._value = value
+    }
+    get value() {
+        return this._value
     }
     set mainColor(color) {
         this.dot.style['backgroundColor'] = color
