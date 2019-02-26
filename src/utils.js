@@ -10,20 +10,18 @@ const utils = {
     time2text(minute, second) {
         return (minute < 10 ? '0' + minute : minute) + ':' + (second < 10 ? '0' + second : second)
     },
-    createEle(type, className) {
+    createElement(type, ...classNames) {
         let element = document.createElement(type)
-        if (className instanceof Array) {
-            element.classList.add(...className)
-        } else {
+        for (let className of classNames) {
             element.classList.add(className)
         }
         return element
     },
-    div(className) {
-        return this.createEle('div', className)
+    div(...classNames) {
+        return this.createElement('div', ...classNames)
     },
-    span(className) {
-        return this.createEle('span', className)
+    span(...classNames) {
+        return this.createElement('span', ...classNames)
     },
 }
 
