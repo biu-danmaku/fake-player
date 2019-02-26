@@ -1,3 +1,4 @@
+import utils from '@/utils'
 import DanmakuConfig from './DanmakuConfig'
 
 import ProgressBar from '@/widgets/ProgressBar'
@@ -17,15 +18,16 @@ class Controls {
     }) {
         this.hideTimer = null
         this.container = undefined
-        this.time = undefined
-        this.duration = undefined
+        this.time      = undefined
+        this.duration  = undefined
+        this.buttonClickHandler = buttonClickHandler
 
         this.progressBar = new ProgressBar({
             eventHandler: progressBarEventHandler,
         })
 
         this.danmakuConfig = new DanmakuConfig({
-            sliderValueChangeHandler: (key, value) => console.log(key, value),
+            sliderValueChangeHandler: (slider) => console.log(slider),
             buttonClickHandler,
         })
 
@@ -34,7 +36,8 @@ class Controls {
                 image: [ iPlay, iPause ]
             },
             'danmaku-config': {
-                image: [ iDanmakuConfig ]
+                image:   iDanmakuConfig,
+                noEvent: true
             },
             'full-window': {
                 image: [ iFullWindow, iFullWindowActive ]
@@ -44,7 +47,9 @@ class Controls {
             },
         }
 
-        render.call(this, buttonClickHandler)
+        renderContainer.call(this)
+        renderButtons.call(this, buttonClickHandler)
+        Object.assign(this.buttons, this.danmakuConfig.buttons)
     }
     fadeOut() {
         this.show()
@@ -65,52 +70,43 @@ class Controls {
     set timeText(value) {
         this.time.innerText = value
     }
-    activeButton(key, active = true) {
-        if (this.buttons[key]) {
-            let button = this.buttons[key]
-            if (button.image instanceof Array && button.image.length > 1) {
-                button.element.innerHTML = active ? button.image[1] : button.image[0]
-            }
-        } else {
-            this.danmakuConfig.activeButton(key, active)
-        }
-    }
 }
 
 export default Controls
 
-function render(buttonClickHandler) {
-    this.container = document.createElement('div')
-    this.container.classList.add('fake-player-controls')
+function renderContainer() {
+    this.container = utils.div('fake-player-controls')
     
-    let mask = document.createElement('div')
-    mask.classList.add('mask')
+    let mask = utils.div('mask')
     this.container.appendChild(mask)
 
     this.container.appendChild(this.progressBar.container)
 
-    let timeBox = document.createElement('div')
-    timeBox.classList.add('time-box')
-    this.time = document.createElement('span')
-    this.duration = document.createElement('span')
+    let timeBox = utils.div('time-box')
+    this.time = utils.span()
+    this.duration = utils.span()
     timeBox.appendChild(this.time)
     timeBox.appendChild(this.duration)
     this.container.appendChild(timeBox)
-
-    renderButtons.call(this, buttonClickHandler)
-    this.buttons['danmaku-config'].element.appendChild(this.danmakuConfig.container)
 }
 
-function renderButtons(clickHandler) {
+function renderButtons(buttonClickHandler) {
     Object.entries(this.buttons).forEach(([ key, button ]) => {
-        button.element = document.createElement('div')
+        button.id = key
+        button.element = utils.div('button')
         if (button.image instanceof Array) {
             button.element.innerHTML = button.image[0]
+            button.active = function (active = true) {
+                this.element.innerHTML = active ? this.image[1] : this.image[0]
+            }
         } else {
             button.element.innerHTML = button.image
         }
-        button.element.classList.add('button', key)
-        button.element.onclick = () => clickHandler(key)
+        button.element.classList.add(key)
+        if ( ! button.noEvent) {
+            button.element.onclick = () => buttonClickHandler(button)
+        }
         this.container.appendChild(button.element)
     })
+    this.buttons['danmaku-config'].element.appendChild(this.danmakuConfig.container)
 }
