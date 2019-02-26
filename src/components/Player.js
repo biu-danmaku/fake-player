@@ -18,45 +18,7 @@ class Player {
         this.screen.addEventListener('click', () => this.togglePlay())
 
         this.controls = new Controls({
-            buttonClickHandler: (button) => {
-                switch (button) {
-                    case 'play':
-                        this.togglePlay()
-                        break
-                    case 'full-window':
-                        this.toggleFullWindow()
-                        break
-                    case 'full-screen':
-                        if (this.fullScreen) {
-                            if (document.webkitCancelFullScreen) {
-                                document.webkitCancelFullScreen();
-                            } else {
-                                document.exitFullscreen()
-                            }
-                            this.fullScreen = false
-                        } else {
-                            if (this.container.webkitRequestFullscreen) {
-                                this.container.webkitRequestFullscreen()
-                            } else {
-                                this.container.requestFullscreen()
-                            }
-                            this.fullScreen = true
-                        }
-                        break
-                    case 'block-scroll':
-                        this.controls.activeButton(button)
-                        break
-                    case 'block-top':
-                        this.controls.activeButton(button)
-                        break
-                    case 'block-bottom':
-                        this.controls.activeButton(button)
-                        break
-                    case 'block-color':
-                        this.controls.activeButton(button)
-                        break
-                }
-            },
+            buttonClickHandler: buttonClickHandler.bind(this),
             progressBarEventHandler: (event, rate) => {
                 switch (event) {
                     case 'hover':
@@ -91,13 +53,14 @@ class Player {
         this.container.appendChild(this.controls.container)
 
         this.time = 0
+        this.buttons = { ...this.controls.buttons }
     }
     play() {
         if (this.playing) return
         this.timer = null
         this.lastTickAt = Date.now()
         this.controls.fadeOut()
-        this.controls.activeButton('play')
+        this.buttons['play'].active()
         if (this.time >= this.duration) {
             this.time = 0
         }
@@ -118,7 +81,7 @@ class Player {
         clearInterval(this.timer)
         this.time += Date.now() - this.lastTickAt
         this.controls.show()
-        this.controls.activeButton('play', false)
+        this.buttons['play'].active(false)
         this.timer = undefined
         if (this.events.has('pause')) {
             this.events.get('pause').forEach(h => h())
@@ -130,22 +93,22 @@ class Player {
     toggleFullWindow() {
         if (this.container.classList.contains('full-window')) {
             this.container.classList.remove('full-window')
-            this.controls.activeButton('full-window', false)
+            this.buttons['full-window'].active(false)
         } else {
             this.container.classList.add('full-window')
-            this.controls.activeButton('full-window')
+            this.buttons['full-window'].active(true)
         }
     }
     applyConfig(key, value) {
         switch (key) {
             case 'opacity':
-                this.controls.danmakuConfig.sliders.opacity.obj.value = value
+                this.controls.danmakuConfig.sliders.opacity.value = value
                 break
             case 'speed':
-                this.controls.danmakuConfig.sliders.speed.obj.value = value
+                this.controls.danmakuConfig.sliders.speed.value = value
                 break
             case 'fontSize':
-                this.controls.danmakuConfig.sliders['font-size'].obj.value = value
+                this.controls.danmakuConfig.sliders['font-size'].value = value
                 break
         }
     }
@@ -175,3 +138,37 @@ class Player {
 }
 
 export default Player
+
+function buttonClickHandler(button) {
+    switch (button.id) {
+        case 'play':
+            this.togglePlay()
+            break
+        case 'full-window':
+            this.toggleFullWindow()
+            break
+        case 'full-screen':
+            if (this.fullScreen) {
+                if (document.webkitCancelFullScreen) {
+                    document.webkitCancelFullScreen();
+                } else {
+                    document.exitFullscreen()
+                }
+                this.fullScreen = false
+            } else {
+                if (this.container.webkitRequestFullscreen) {
+                    this.container.webkitRequestFullscreen()
+                } else {
+                    this.container.requestFullscreen()
+                }
+                this.fullScreen = true
+            }
+            break
+        case 'block-scroll':
+        case 'block-top':
+        case 'block-bottom':
+        case 'block-color':
+            button.active()
+            break
+    }
+}
