@@ -1,19 +1,17 @@
+import utils from '@/utils'
+
 class ProgressBar {
     constructor({ eventHandler }) {
-        this.container = document.createElement('div')
-        this.container.classList.add('fake-player-progress-bar')
+        this.container = utils.div('fake-player-progress-bar')
 
         this.dragging = false
 
-        let wrap = document.createElement('div')
-        wrap.classList.add('wrap')
+        let wrap = utils.div('wrap')
 
-        this.played = document.createElement('div')
-        this.played.classList.add('played')
+        this.played = utils.div('played')
         wrap.appendChild(this.played)
 
-        this.time = document.createElement('div')
-        this.time.classList.add('time-tip')
+        this.time = utils.div('time-tip')
         this.container.appendChild(this.time)
 
         this.container.appendChild(wrap)
