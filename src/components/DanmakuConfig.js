@@ -12,24 +12,24 @@ import iDanmakuColor        from '@/images/danmaku-color.svg'
 import iDanmakuColorActive  from '@/images/danmaku-color-active.svg'
 
 class DanmakuConfig {
-    constructor({ buttonClickHandler, sliderValueChangeHandler }) {
+    constructor({ buttonClickHandler, sliderMoveHandler }) {
         this._mainColor = '#f00'
         this.container = utils.div('fake-player-danmaku-config')
 
         this.buttons = {
-            'block-scroll': {
+            blockScroll: {
                 title: '滚动',
                 image: [ iDanmakuScroll, iDanmakuScrollActive ],
             },
-            'block-top':    {
+            blockTop: {
                 title: '顶部',
                 image: [ iDanmakuTop, iDanmakuTopActive ]
             },
-            'block-bottom': {
+            blockBottom: {
                 title: '底部',
                 image: [ iDanmakuBottom, iDanmakuBottomActive ]
             },
-            'block-color':  {
+            blockColor: {
                 title: '彩色',
                 image: [ iDanmakuColor, iDanmakuColorActive ]
             },
@@ -43,14 +43,14 @@ class DanmakuConfig {
                 title:  '弹幕速度',
                 scales: ['极慢', '', '适中', '', '超快']
             },
-            'font-size': {
+            'fontSize': {
                 title:  '字体大小',
                 scales: ['极小', '', '适中', '', '超大']
             }
         }
 
         renderButtons.call(this, buttonClickHandler)
-        renderSliders.call(this, sliderValueChangeHandler)
+        renderSliders.call(this, sliderMoveHandler)
     }
     set mainColor(color) {
         this._mainColor = color
@@ -65,7 +65,7 @@ class DanmakuConfig {
 
 export default DanmakuConfig
 
-function renderSliders(valueChangeHandler) {
+function renderSliders(sliderMoveHandler) {
     Object.entries(this.sliders).forEach(([ key, slider ]) => {
         let titleElement = utils.div('title')
         titleElement.innerText = slider.title
@@ -75,7 +75,7 @@ function renderSliders(valueChangeHandler) {
         let _slider = new Slider({
             id:       key,
             scales:   slider.scales,
-            onChange: valueChangeHandler
+            onChange: sliderMoveHandler
         })
         content.appendChild(_slider.container)
 

@@ -23,6 +23,9 @@ const utils = {
     span(...classNames) {
         return this.createElement('span', ...classNames)
     },
+    camel2hyphen(str) {
+        return str.replace(/[A-Z]/g, '-$&').toLowerCase()
+    },
 }
 
 export default utils

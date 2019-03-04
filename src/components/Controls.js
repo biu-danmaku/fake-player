@@ -11,38 +11,33 @@ import iFullWindowActive from '@/images/full-window-active.svg'
 import iFullScreen       from '@/images/full-screen.svg'
 
 class Controls {
-    constructor({
-        buttonClickHandler,
-        progressBarEventHandler,
-        sliderValueChangeHandler,
-    }) {
+    constructor({ buttonClickHandler, progressBarEventHandler, sliderMoveHandler }) {
         this.hideTimer = null
         this.container = undefined
         this.time      = undefined
         this.duration  = undefined
-        this.buttonClickHandler = buttonClickHandler
 
         this.progressBar = new ProgressBar({
             eventHandler: progressBarEventHandler,
         })
 
         this.danmakuConfig = new DanmakuConfig({
-            sliderValueChangeHandler: (slider) => console.log(slider),
+            sliderMoveHandler,
             buttonClickHandler,
         })
 
         this.buttons = {
-            'play': {
+            play: {
                 image: [ iPlay, iPause ]
             },
-            'danmaku-config': {
+            danmakuConfig: {
                 image:   iDanmakuConfig,
                 noEvent: true
             },
-            'full-window': {
+            fullWindow: {
                 image: [ iFullWindow, iFullWindowActive ]
             },
-            'full-screen': {
+            fullScreen: {
                 image: iFullScreen
             },
         }
@@ -93,7 +88,7 @@ function renderContainer() {
 function renderButtons(buttonClickHandler) {
     Object.entries(this.buttons).forEach(([ key, button ]) => {
         button.id = key
-        button.element = utils.div('button')
+        button.element = utils.div('button', utils.camel2hyphen(key))
         if (button.image instanceof Array) {
             button.element.innerHTML = button.image[0]
             button.active = function (active = true) {
@@ -102,11 +97,10 @@ function renderButtons(buttonClickHandler) {
         } else {
             button.element.innerHTML = button.image
         }
-        button.element.classList.add(key)
         if ( ! button.noEvent) {
             button.element.onclick = () => buttonClickHandler(button)
         }
         this.container.appendChild(button.element)
     })
-    this.buttons['danmaku-config'].element.appendChild(this.danmakuConfig.container)
+    this.buttons.danmakuConfig.element.appendChild(this.danmakuConfig.container)
 }

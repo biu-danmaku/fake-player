@@ -9,6 +9,12 @@ class Player {
         this.timer = undefined
         this.fullScreen = false
         this.lastTickAt = 0
+        this.config = {
+            blockScroll: false,
+            blockTop:    false,
+            blockBottom: false,
+            blockColor:  false,
+        }
 
         this.container = document.createElement('div')
         this.container.classList.add('fake-player-player')
@@ -19,6 +25,11 @@ class Player {
 
         this.controls = new Controls({
             buttonClickHandler: buttonClickHandler.bind(this),
+            sliderMoveHandler: (slider) => {
+                if (this.events.has('configChange')) {
+                    this.events.get('configChange').forEach(h => h(slider.id, slider.value))
+                }
+            },
             progressBarEventHandler: (event, rate) => {
                 switch (event) {
                     case 'hover':
@@ -30,8 +41,8 @@ class Player {
                     case 'change':
                         this.time = rate * this.duration
                         this.lastTickAt = Date.now()
-                        if (this.events.has('change')) {
-                            this.events.get('change').forEach(h => h(this.time))
+                        if (this.events.has('timeChange')) {
+                            this.events.get('timeChange').forEach(h => h(this.time))
                         }
                         break
                 }
@@ -93,10 +104,10 @@ class Player {
     toggleFullWindow() {
         if (this.container.classList.contains('full-window')) {
             this.container.classList.remove('full-window')
-            this.buttons['full-window'].active(false)
+            this.buttons.fullWindow.active(false)
         } else {
             this.container.classList.add('full-window')
-            this.buttons['full-window'].active(true)
+            this.buttons.fullWindow.active(true)
         }
     }
     applyConfig(key, value) {
@@ -108,7 +119,7 @@ class Player {
                 this.controls.danmakuConfig.sliders.speed.value = value
                 break
             case 'fontSize':
-                this.controls.danmakuConfig.sliders['font-size'].value = value
+                this.controls.danmakuConfig.sliders.fontSize.value = value
                 break
         }
     }
@@ -144,10 +155,10 @@ function buttonClickHandler(button) {
         case 'play':
             this.togglePlay()
             break
-        case 'full-window':
+        case 'fullWindow':
             this.toggleFullWindow()
             break
-        case 'full-screen':
+        case 'fullScreen':
             if (this.fullScreen) {
                 if (document.webkitCancelFullScreen) {
                     document.webkitCancelFullScreen();
@@ -164,11 +175,15 @@ function buttonClickHandler(button) {
                 this.fullScreen = true
             }
             break
-        case 'block-scroll':
-        case 'block-top':
-        case 'block-bottom':
-        case 'block-color':
-            button.active()
+        case 'blockScroll':
+        case 'blockTop':
+        case 'blockBottom':
+        case 'blockColor':
+            this.config[button.id] = ! this.config[button.id]
+            button.active(this.config[button.id])
+            if (this.events.has('configChange')) {
+                this.events.get('configChange').forEach(h => h(button.id, this.config[button.id]))
+            }
             break
     }
 }

@@ -1,12 +1,13 @@
 import utils from '@/utils'
 
 class Slider {
-    constructor({ id, scales, onChange}) {
+    constructor({ id, scales, onChange }) {
         this.container = utils.div('fake-player-slider')
 
         this.left     = undefined
         this.width    = undefined
         this.scales   = undefined
+        this._value   = undefined
         this.onChange = onChange
         this.id       = id
 

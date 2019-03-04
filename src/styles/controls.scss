@@ -28,9 +28,6 @@
         &:hover {
             fill: rgba(255, 255, 255, .9);
         }
-        &.play {
-            left: 24px;
-        }
         &.danmaku-config {
             left: 180px;
             .fake-player-danmaku-config {
@@ -39,9 +36,14 @@
                 bottom: 100%;
                 transform: translateX(-50%);
             }
-            &:hover .fake-player-danmaku-config {
-                display: block;
+            &:active, &:hover {
+                .fake-player-danmaku-config {
+                    display: block;
+                }
             }
+        }
+        &.play {
+            left: 24px;
         }
         &.full-window {
             right: 60px;
@@ -61,5 +63,8 @@
     &.hide {
         opacity: 0;
         pointer-events: none;
+    }
+    &:active {
+        opacity: 1;
     }
 }

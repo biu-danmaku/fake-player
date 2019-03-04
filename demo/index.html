@@ -32,9 +32,10 @@
   player.on('pause', function () {
     actionTip.innerText = 'Pause'
   })
-  player.on('change', function (time) {
+  player.on('timeChange', function (time) {
     actionTip.innerText = 'Time changed to ' + time + ' ms'
   })
+  player.on('configChange', (key, value) => console.log(key, value))
 </script>
 </body>
 </html>
