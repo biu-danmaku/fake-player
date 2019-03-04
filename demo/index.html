@@ -26,16 +26,18 @@
     duration: 300,
   })
   const actionTip = document.querySelector('.action-tip')
-  player.on('play', function (time) {
-    actionTip.innerText = 'Play at ' + time + ' ms'
+  player.on('play', time => {
+    actionTip.innerText = `Play at ${time} ms`
   })
-  player.on('pause', function () {
+  player.on('pause', () => {
     actionTip.innerText = 'Pause'
   })
-  player.on('timeChange', function (time) {
-    actionTip.innerText = 'Time changed to ' + time + ' ms'
+  player.on('timeChange', time => {
+    actionTip.innerText = `Time change to ${time} ms`
   })
-  player.on('configChange', (key, value) => console.log(key, value))
+  player.on('configChange', (name, value) => {
+    actionTip.innerText = `Config "${name}" change to ${value}`
+  })
 </script>
 </body>
 </html>
