@@ -14,8 +14,7 @@
 新建一个播放器：
 ```js
 const player = new FakePlayer({
-    // 创建播放器时必须提供容器
-    // 可以是 CSS 选择器或 HTMLElement 实例
+    // 播放器容器, 可以是 CSS 选择器或 HTMLElement 实例
     container: '.player-box',
     // "视频"时长(毫秒)
     duration: 300,
@@ -26,28 +25,27 @@ const player = new FakePlayer({
 - `player.on(eventName, handler)` 监听播放器[事件](#事件)
 
 ### 事件
-1. `play`，点击播放按钮：
-```js
-player.on('play', function (time) {
-    // time 为当前播放时间(毫秒)
-    // ...
-})
-```
+1. `play`，点击播放按钮：  
+handler 参数：`time` - 当前播放时间；
 
-2. `pause`，点击暂停按钮：
-```js
-player.on('pause', function () {
-    // ...
-})
-```
+2. `pause`，点击暂停按钮；
 
-3. `change`，拖拽进度条改变播放时间：
-```js
-player.on('change', function (time) {
-    // time 为当前播放时间(毫秒)
-    // ...
-})
-```
+3. `timeChange`，拖拽进度条改变播放时间：  
+handler 参数：`time` - 当前播放时间；
+
+4. `configChange`，修改播放器[配置](#配置)：  
+handler 参数：`name` - 配置名称，`value` - 值；
+
+## 配置
+名称|类型|说明
+-|-|-
+blockScroll|Boolean|禁用滚动弹幕，默认为 false
+blockTop|Boolean|禁用顶端弹幕，默认为 false
+blockBottom|Boolean|禁用底部弹幕，默认为 false
+blockColor|Boolean|禁用彩色弹幕，默认为 false
+fontSize|Number|字体大小，0 到 4 之间的整数，默认为 2
+opacity|Number|弹幕透明度，0 到 1 之间的浮点数，默认为 1
+speed|Number|弹幕速度，0 到 1 之间的浮点数，默认为 1
 
 ### 属性
 下列属性可在创建播放器时提供也可以在运行时修改：
