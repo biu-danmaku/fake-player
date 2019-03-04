@@ -26,17 +26,17 @@ const player = new FakePlayer({
 
 ### 事件
 1. `play`，点击播放按钮：  
-handler 参数：`time` - 当前播放时间；
+handler 参数：`time` - `当前播放时间`；
 
 2. `pause`，点击暂停按钮；
 
 3. `timeChange`，拖拽进度条改变播放时间：  
-handler 参数：`time` - 当前播放时间；
+handler 参数：`time` - `当前播放时间`；
 
 4. `configChange`，修改播放器[配置](#配置)：  
-handler 参数：`name` - 配置名称，`value` - 值；
+handler 参数：`name` - `配置名称`，`value` - `值`；
 
-## 配置
+### 配置
 名称|类型|说明
 -|-|-
 blockScroll|Boolean|禁用滚动弹幕，默认为 false
