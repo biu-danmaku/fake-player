@@ -27,10 +27,10 @@ class FakePlayer {
         this.background = args.background || '#000'
     }
     set duration(second) {
-        this._player.duration = second * 1000
+        this._player.duration = second
     }
     get duration() {
-        return this._player.duration / 1000
+        return this._player.duration
     }
     set background(value) {
         this._player.screen.style['background'] = value
