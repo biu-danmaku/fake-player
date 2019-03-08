@@ -104,21 +104,21 @@ function renderButtons(buttonClickHandler) {
         image.innerHTML = button.image[0]
         button.element.appendChild(image)
 
-        button.active = (active = true, color = this._mainColor) => {
-            if (active) {
-                image.style['fill'] = color
-                image.innerHTML = button.image[1]
-            } else {
-                image.innerHTML = button.image[0]
-                image.style['fill'] = ''
-            }
-            button.actived = active
-        }
-
         let title = utils.div('title')
         title.innerText = button.title
         button.element.appendChild(title)
         delete button.title
+
+        button.active = (active = true, color = this._mainColor) => {
+            if (active) {
+                image.style['fill'] = title.style['color'] = color
+                image.innerHTML = button.image[1]
+            } else {
+                image.innerHTML = button.image[0]
+                image.style['fill'] = title.style['color'] = ''
+            }
+            button.actived = active
+        }
 
         buttons.appendChild(button.element)
     })
